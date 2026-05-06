@@ -26,7 +26,7 @@ public class JWTAuthenticationConfig {
 
         return Jwts.builder()
                 .subject(userDetails.getUsername())
-                .claim("authorities", authorities) // 🔥 IMPORTANTE
+                .claim("authorities", authorities) 
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 86400000)) // 1 día
                 .signWith((SecretKey) getSigningKey(SUPER_SECRET_KEY))

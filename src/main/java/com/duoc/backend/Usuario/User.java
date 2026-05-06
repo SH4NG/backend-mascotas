@@ -9,29 +9,34 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 @JsonIgnoreProperties({
     "enabled",
     "accountNonExpired",
     "accountNonLocked",
     "credentialsNonExpired",
-    "authorities",
-    "password"
+    "authorities"
 })
 @Entity
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String username;
     private String email;
+
+    
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
     private String role;
 
     public Integer getId() {
@@ -58,9 +63,8 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    // 🔥 OCULTAR PASSWORD
+    
     @Override
-    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -77,7 +81,7 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    // 🔥 OCULTAR AUTHORITIES
+    //OCULTAR AUTHORITIES
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {

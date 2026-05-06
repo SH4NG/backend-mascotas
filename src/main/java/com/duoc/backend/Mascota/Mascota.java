@@ -1,13 +1,9 @@
 package com.duoc.backend.Mascota;
 
-import com.duoc.backend.Usuario.User;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Mascota {
@@ -21,11 +17,6 @@ public class Mascota {
     private String raza;
     private String color;
     private int edad;
-
-    // RELACIÓN CON USUARIO
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     public Mascota() {}
 
@@ -41,7 +32,7 @@ public class Mascota {
         return id;
     }
 
-    public void setId(Long id) { // ✔️ ya lo tenías bien
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -83,15 +74,5 @@ public class Mascota {
 
     public void setEdad(int edad) {
         this.edad = edad;
-    }
-
-    // 🔥 GET Y SET DEL USUARIO
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

@@ -16,9 +16,14 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
-        return userRepository.save(user);
-    }
+public User register(@RequestBody User user) {
+
+    System.out.println("USERNAME: " + user.getUsername());
+    System.out.println("EMAIL: " + user.getEmail());
+    System.out.println("PASSWORD: " + user.getPassword());
+
+    return userRepository.save(user);
+}
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Integer id) {
         userRepository.deleteById(id);

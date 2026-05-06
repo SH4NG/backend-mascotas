@@ -26,7 +26,7 @@ public class ReporteController {
     @Autowired
     private UserRepository userRepository;
 
-    // 🔥 Crear reporte
+    // CREAR REPORTE (SIN RELACIONES)
     @PostMapping
     public Reporte crearReporte(@RequestBody Reporte reporte) {
 
@@ -35,34 +35,44 @@ public class ReporteController {
 
         User user = userRepository.findByUsername(username);
 
-        reporte.setUser(user);
-        reporte.setEstado("ENCONTRADO"); // default
+        if (user == null) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+
+        // AHORA USAMOS ID
+        reporte.setUserId(user.getId().longValue());
+
+        // estado por defecto
+        reporte.setEstado("ENCONTRADO");
 
         return reporteService.guardarReporte(reporte);
     }
 
-    // 🔥 Ver reportes de mascotas encontradas
+    // VER SOLO ENCONTRADAS
     @GetMapping("/encontradas")
     public List<Reporte> getEncontradas() {
         return reporteService.obtenerReportesEncontrados();
     }
+
+    //  VER TODOS
     @GetMapping
     public List<Reporte> getAllReportes() {
         return reporteService.getAllReportes();
     }
 
+    // SOLO ADMIN BORRA
     @DeleteMapping("/{id}")
-public void deleteReporte(@PathVariable Long id) {
+    public void deleteReporte(@PathVariable Long id) {
 
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-    boolean isAdmin = auth.getAuthorities().stream()
-            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-    if (!isAdmin) {
-        throw new RuntimeException("Solo ADMIN puede eliminar reportes");
+        if (!isAdmin) {
+            throw new RuntimeException("Solo ADMIN puede eliminar reportes");
+        }
+
+        reporteService.deleteReporte(id);
     }
-
-    reporteService.deleteReporte(id);
-}
 }
